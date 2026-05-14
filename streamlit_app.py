@@ -1,5 +1,4 @@
 import streamlit as st
-from personal_context import retrieve_personal_data
 import io
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
@@ -13,17 +12,15 @@ st.write("Ajuste de margen de 60mm y foliado automático.")
 
 archivo = st.file_uploader("Subir PDF original", type=["pdf"])
 foliado_inicio = st.number_input("Número de folio inicial", min_value=1, value=1)
-texto_sello = st.text_input("Texto del sello (opcional)", "")
 
 if st.button("Procesar Documento"):
     if archivo is not None:
-        # Lógica de procesamiento
         try:
+            # Abrir el PDF
             pdf_original = pikepdf.Pdf.open(archivo)
             output_pdf = io.BytesIO()
             
-            # Aquí se aplicaría el desplazamiento de margen y agregado de texto
-            # Por ahora, generamos la descarga para confirmar que funciona
+            # Guardar (esto confirma que las librerías funcionan)
             pdf_original.save(output_pdf)
             
             st.success("¡Documento procesado con éxito!")
