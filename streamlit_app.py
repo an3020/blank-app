@@ -20,9 +20,6 @@ FUENTES = {
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # FUNCIÓN 1 — NUMERACIÓN
-# Genera un PDF nuevo desde cero con una página por folio.
-# Cada página muestra "{texto} {número}" centrado horizontalmente,
-# a la distancia elegida desde el borde superior.
 # ═══════════════════════════════════════════════════════════════════════════════
 
 def generar_numeracion(texto, folio_inicio, folio_fin, fuente, tamano, dist_top_mm):
@@ -46,11 +43,6 @@ def generar_numeracion(texto, folio_inicio, folio_fin, fuente, tamano, dist_top_
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # FUNCIÓN 2 — MARGEN ANCHO
-# Agrega margen de encuadernación alternante:
-#   • Páginas impares (1, 3, 5…): margen a la IZQUIERDA
-#   • Páginas pares (2, 4, 6…):  margen a la DERECHA
-# El contenido se escala proporcionalmente y se centra verticalmente.
-# Requiere un PDF existente.
 # ═══════════════════════════════════════════════════════════════════════════════
 
 def agregar_margen(archivo, margen_mm):
@@ -97,17 +89,17 @@ def agregar_margen(archivo, margen_mm):
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # FUNCIÓN 3 — TEXTO
-# Genera un PDF nuevo desde cero (A4 en blanco) con un solo renglón
-# de texto en la posición exacta indicada por el usuario.
 # ═══════════════════════════════════════════════════════════════════════════════
 
 def generar_texto(texto, dist_izq_mm, dist_top_mm, fuente, tamano, tracking):
     buf = io.BytesIO()
     w, h = A4
     c = canvas.Canvas(buf, pagesize=A4)
-    c.setFont(fuente, tamano)
-    c.setCharSpace(tracking)
-    c.drawString(dist_izq_mm * mm, h - dist_top_mm * mm, texto)
+    t = c.beginText(dist_izq_mm * mm, h - dist_top_mm * mm)
+    t.setFont(fuente, tamano)
+    t.setCharSpace(tracking)
+    t.textLine(texto)
+    c.drawText(t)
     c.showPage()
     c.save()
     buf.seek(0)
